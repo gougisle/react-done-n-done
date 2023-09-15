@@ -1,3 +1,17 @@
+# react-template
+
+The purpose of this project is to be a starting template for future React projects. It comes with some packages already added for convenience (see below). 
+Some of the default files from 'npx create-react-app' have been removed.
+
+### Currently Included Packages:
+- [React-Bootstrap](https://react-bootstrap.github.io/docs/getting-started/introduction) (v5)
+- [Vanilla Bootstrap](https://getbootstrap.com/docs/5.0/getting-started/introduction/) (v5)
+- [Sass](https://sass-lang.com/guide/) (.scss)
+- [Axios](https://axios-http.com/docs/intro)
+- [FontAwesome](https://fontawesome.com/search?o=r&m=free)
+- _...these are subject to change over time_
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
