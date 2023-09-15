@@ -1,0 +1,157 @@
+.crazy-button {
+  padding: 0.8em 1.8em;
+  border: 2px solid #17c3b2;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 16px;
+  transition: 0.3s;
+  z-index: 1;
+  font-family: inherit;
+  color: #17c3b2;
+}
+
+.crazy-button::before {
+  content: "";
+  width: 0;
+  height: 300%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: #17c3b2;
+  transition: 0.5s ease;
+  display: block;
+  z-index: -1;
+}
+
+.crazy-button:hover::before {
+  width: 105%;
+}
+
+.crazy-button:hover {
+  color: #111;
+}
+/////////////////
+
+.complete-button {
+  z-index: 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background: #183153;
+  font-family: "Montserrat", sans-serif;
+  box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  border: none;
+}
+
+.complete-button:after {
+  content: " ";
+  width: 0%;
+  height: 100%;
+  background: #ffd401;
+  position: absolute;
+  transition: all 0.4s ease-in-out;
+  right: 0;
+}
+
+.complete-button:hover::after {
+  right: auto;
+  left: 0;
+  width: 100%;
+}
+
+.complete-button span {
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  padding: 18px 25px;
+  color: #fff;
+  font-size: 1.125em;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  z-index: 20;
+  transition: all 0.3s ease-in-out;
+}
+
+.complete-button:hover span {
+  color: #183153;
+  animation: scaleUp 0.3s ease-in-out;
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/// /////////////////
+.todo-button {
+  height: 5em;
+  border: none;
+  transition: background-color 0.3s ease-in-out;
+  &.complete {
+    background-color: rgba(54, 189, 61, 0.464);
+    border-radius: 5px 0 0 5px;
+    &:hover {
+      background-color: rgba(54, 189, 61, 0.877);
+    }
+  }
+  &.edit {
+    background-color: rgba(255, 251, 0, 0.464);
+    &:hover {
+      background-color: rgb(255, 251, 10);
+    }
+  }
+  &.delete {
+    background-color: rgba(248, 119, 119, 0.464);
+    border-radius: 0 5px 5px 0;
+    &:hover {
+      background-color: rgb(247, 81, 81);
+    }
+  }
+  &.save {
+    background-color: rgb(81, 156, 247, 0.464);
+    border-radius: 0 5px 5px 0;
+    &:hover {
+      background-color: rgb(81, 156, 247);
+    }
+  }
+}
+.left-button {
+  height: 5em;
+  border: none;
+
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  transition: background-color 0.3s ease-in-out;
+  &:hover {
+    background-color: rgba(54, 189, 61, 0.877);
+  }
+}
+
+.edit-button {
+  background-color: rgba(248, 246, 119, 0.603);
+  height: 5em;
+  border: none;
+  //border-radius: 5px 0 0 5px;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  transition: background-color 0.3s ease-in-out;
+  &:hover {
+    background-color: rgb(247, 244, 81);
+  }
+}
