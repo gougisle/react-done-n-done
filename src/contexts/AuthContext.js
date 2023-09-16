@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { auth } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signOut,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 //create a context that we can use throughout the App
 const AuthContext = React.createContext();
@@ -19,6 +23,13 @@ export function AuthProvider({ children }) {
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
+  function login(email, password) {
+    return signInWithEmailAndPassword(auth, email, password);
+  }
+
+  function logout() {
+    return signOut(auth);
+  }
 
   useEffect(() => {
     //this method automatically fires whenever the user state changes (i.e. create, login, logout, etc.)
@@ -29,7 +40,7 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  const value = { currentUser, signup };
+  const value = { currentUser, signup, logout, login };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -1,41 +1,31 @@
-import React, { useState } from "react";
+import React, { Suspense } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import HomeView from "./views/HomeView";
-import SignUpView from "./views/SignUpView";
-import LoginView from "./views/LoginView";
+//import LoadingSpinner from "./components/LoadingSpinner";
 import TopNavbar from "./components/TopNavbar";
-import { auth } from "./firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { AuthProvider } from "./contexts/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "./App.scss";
+import "react-toastify/dist/ReactToastify.css";
 
-//export const AuthContext = React.createContext();
+const LoadingSpinner = React.lazy(() => import("./components/LoadingSpinner"));
+const TodoListView = React.lazy(() => import("./views/TodoListView"));
+const SignUpView = React.lazy(() => import("./views/SignUpView"));
+const LoginView = React.lazy(() => import("./views/LoginView"));
 
 function App() {
-  // const [currentUser, setCurrentUser] = useState();
-
-  // function signup(email, password) {
-  //   return createUserWithEmailAndPassword(auth, email, password);
-  // }
-
-  // const authContextValue = { currentUser, signup };
-
   return (
     <div className="App">
-      <ToastContainer />
-      <TopNavbar></TopNavbar>
-      <AuthProvider>
-        {" "}
-        <Router>
+      <TopNavbar></TopNavbar>{" "}
+      <Router>
+        <Suspense fallback={<LoadingSpinner></LoadingSpinner>}>
+          {" "}
           <Routes>
-            {" "}
             <Route exact path="/login" Component={LoginView} />
             <Route exact path="/signup" Component={SignUpView} />
-            <Route exact path="/" Component={HomeView} />
+            <Route exact path="/" Component={TodoListView} />
           </Routes>
-        </Router>
-      </AuthProvider>{" "}
+        </Suspense>
+      </Router>
+      <ToastContainer />
     </div>
   );
 }

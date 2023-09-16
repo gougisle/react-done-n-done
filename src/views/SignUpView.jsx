@@ -9,7 +9,6 @@ import {
   Alert,
 } from "react-bootstrap";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../contexts/AuthContext";
 
 const SignUpView = () => {
@@ -28,27 +27,27 @@ const SignUpView = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const passwordRegex = new RegExp(
-      "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)[A-Za-zd]{6,}$"
-    );
 
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      setError("Passwords must match");
+    const passwordInput = passwordRef.current.value;
+    const passwordConfInput = passwordConfirmRef.current.value;
+    const emailInput = emailRef.current.value;
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*d).{6,}/;
+
+    //Password must include at least: 1 lowercase, 1 uppercase, 1 number
+    if (passwordInput !== passwordConfInput) {
+      setError("Passwords must match.");
     } else if (
-      passwordRef.current.value.length < 6 ||
-      passwordRef.current.value.length < 6
+      !passwordRegex.test(passwordInput) ||
+      !passwordRegex.test(passwordConfInput)
     ) {
-      setError("Password must be at least 6 characters long");
+      setError(
+        "Password must be contain at least 6 characters with at least 1 lowercase, 1 Uppercase and 1 number."
+      );
     } else {
       try {
-        const res = await authContext.signup(
-          emailRef.current.value,
-          passwordRef.current.value
-        );
-        toast.success("Great! Successfully created your account.", {
-          theme: "colored",
-        });
-        navigate("/login");
+        const res = await authContext.signup(emailInput, passwordInput);
+        toast.success("Great! Successfully created your account.", {});
       } catch (error) {
         if (error.code === "auth/email-already-in-use") {
           setError(
@@ -59,13 +58,13 @@ const SignUpView = () => {
             "Something went wrong when trying to register your account, please try again.",
             { theme: "colored" }
           );
+          console.error("err message: ", error.code);
         }
-
-        console.log("err message: ", error.code);
       }
     }
     setLoading(false);
   };
+
   return (
     <>
       <Container

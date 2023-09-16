@@ -20,10 +20,6 @@ const SingleToDo = ({
   isComplete,
   handleUndo,
 }) => {
-  const dateString = note.timeStamp.toLocaleString("en-US", {
-    timeZone: "PST",
-  });
-
   return (
     <Card
       border={isComplete && "success"}
@@ -32,8 +28,6 @@ const SingleToDo = ({
           ? "bg-lightyarn my-2 d-flex justify-content-center"
           : " d-flex justify-content-center my-2"
       }
-      key={"Note-" + note.id}
-      id={note.id}
     >
       <Row className="align-items-center">
         {!isComplete && (
