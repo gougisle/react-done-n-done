@@ -14,7 +14,7 @@ const SingleToDo = ({
   note,
   handleTodoItemEdit,
   triggerTodoItemEdit,
-  handleNoteRemoval,
+  handleTodoItemRemoval,
   addToCompleted,
   isComplete,
   handleUndo,
@@ -93,7 +93,7 @@ const SingleToDo = ({
                   <button
                     type="button"
                     onClick={(e) => {
-                      handleNoteRemoval(note.id, e);
+                      handleTodoItemRemoval(note.id, e);
                     }}
                     className="todo-button delete"
                     style={{ width: "50%" }}

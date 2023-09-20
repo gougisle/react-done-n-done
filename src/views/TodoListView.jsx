@@ -126,6 +126,20 @@ const TodoListView = () => {
       console.error("handleTodoItemEdit: Something went wrong");
     }
   };
+
+  const handleTodoItemRemoval = (todoItemId) => {
+    const selectedListIndex = getIndexOfCurrentList();
+
+    let newArrayOfTodoItems = todoLists[selectedListIndex].todoArray.filter(
+      (item) => item.id !== todoItemId
+    );
+
+    setTodoLists((prevState) => {
+      let ns = [...prevState];
+      ns[selectedListIndex].todoArray = newArrayOfTodoItems;
+      return ns;
+    });
+  };
   //#endregion
 
   //#region Utilities
@@ -146,23 +160,6 @@ const TodoListView = () => {
     return timestamp + randomStr;
   }
   //#endregion
-
-  const handleNoteRemoval = (id, event) => {
-    event.preventDefault();
-    const newTodoArray = todoLists[selectedListId].todoArray.filter(
-      (item) => item.id !== id
-    );
-    const selectedListIdx = getIndexOfCurrentList();
-
-    setTodoLists((prevState) => {
-      let newTodoLists = [...prevState];
-      newTodoLists[selectedListIdx].todoArray = newTodoArray;
-
-      return newTodoLists;
-    });
-    // const newArray = notesArray.filter((item) => item.id !== id);
-    // setNotesArray(newArray);
-  };
 
   const renderSelectedList = () => {
     const selectedListIdx = getIndexOfCurrentList();
@@ -201,7 +198,7 @@ const TodoListView = () => {
           note={note}
           handleTodoItemEdit={handleTodoItemEdit}
           triggerTodoItemEdit={triggerTodoItemEdit}
-          handleNoteRemoval={handleNoteRemoval}
+          handleTodoItemRemoval={handleTodoItemRemoval}
           addToCompleted={addToCompleted}
           handleUndo={handleUndo}
           isComplete={true}
@@ -217,7 +214,7 @@ const TodoListView = () => {
           note={note}
           handleTodoItemEdit={handleTodoItemEdit}
           triggerTodoItemEdit={triggerTodoItemEdit}
-          handleNoteRemoval={handleNoteRemoval}
+          handleTodoItemRemoval={handleTodoItemRemoval}
           addToCompleted={addToCompleted}
           handleUndo={handleUndo}
           isComplete={false}
@@ -277,16 +274,7 @@ const TodoListView = () => {
           </Row>
           <Row>
             <Col style={{ height: "70vh", overflowY: "auto" }}>
-              <div>
-                {renderSelectedList()}
-                {/* {notesArray.length > 0 ? (
-                  notesArray.map(mapToDoItems)
-                ) : (
-                  <h3 className="text-muted text-center">
-                    <i>Add some notes...</i>
-                  </h3>
-                )} */}
-              </div>
+              <div>{renderSelectedList()}</div>
             </Col>
           </Row>
           <Row>
