@@ -14,28 +14,19 @@ import SingleToDo from "../components/SingleToDo";
 import { toast } from "react-toastify";
 
 const TodoListView = () => {
-  function generateUID() {
-    const timestamp = Date.now().toString(36);
-    const randomStr = Math.random().toString(36).substring(2, 7);
-    return timestamp + randomStr;
-  }
-
-  const uid = generateUID();
-  console.log(uid);
-
   const [todoLists, setTodoLists] = useState([
     {
       id: 1,
       label: "Camping",
       todoArray: [
-        { id: 1, content: "back for the campling trip", isUpdate: false },
+        { id: 1, content: "Pack for the camping trip", isUpdate: false },
       ],
     },
     {
       id: 2,
       label: "Grocery",
       todoArray: [
-        { id: 1, content: "By steack and potatoes", isUpdate: false },
+        { id: 1, content: "Buy steak and potatoes", isUpdate: false },
       ],
     },
     {
@@ -50,22 +41,28 @@ const TodoListView = () => {
   const [completedList, setCompletedList] = useState([]);
   const todoInputRef = useRef();
 
-  const getIndexOfCurrentList = () => {
-    return todoLists.findIndex((item) => item.id === selectedListId);
-  };
+  //#region ToDo Functionality
   //DONE
+
+  /*
+    Refactoring Notes
+    - Select the current focused list
+    - create a new array of todo items from within that list
+    - Edit the specified todo item within that list
+    - Replace the existing todo items array in the current focused list
+  */
   const addNewNote = () => {
     if (todoInputRef.current.value.length < 1) {
       toast.error("Notes must be at least 1 characters long.");
     } else {
       const timeStamp = new Date();
-      const newNoteId = generateUID();
+      const newTodoItemId = generateUID();
       const selectedListIdx = getIndexOfCurrentList();
 
-      let newTodoItems = todoLists[selectedListIdx].todoArray;
+      let newArrayOfTodoItems = todoLists[selectedListIdx].todoArray;
 
-      newTodoItems.unshift({
-        id: newNoteId,
+      newArrayOfTodoItems.unshift({
+        id: newTodoItemId,
         content: todoInputRef.current.value,
         isUpdate: false,
         timeStamp: timeStamp,
@@ -73,12 +70,82 @@ const TodoListView = () => {
 
       setTodoLists((prevState) => {
         let newTodoLists = [...prevState];
-        newTodoLists[selectedListIdx].todoArray = newTodoItems;
+        newTodoLists[selectedListIdx].todoArray = newArrayOfTodoItems;
 
         return newTodoLists;
       });
+      todoInputRef.current.value = "";
     }
   };
+
+  const triggerTodoItemEdit = (todoItemId) => {
+    const selectedListIdx = getIndexOfCurrentList();
+    let newArrayOfTodoItems = todoLists[selectedListIdx].todoArray;
+
+    //create function to select index of specified item based on Id of the TodoItem and the index of the current list beingh displayed
+    const selectedTodoIdx = getIndexOfTodoItemById(
+      todoItemId,
+      newArrayOfTodoItems
+    );
+
+    if (selectedTodoIdx >= 0) {
+      setTodoLists((prevState) => {
+        let newTodoLists = [...prevState];
+        newTodoLists[selectedListIdx].todoArray[
+          selectedTodoIdx
+        ].isUpdate = true;
+
+        return newTodoLists;
+      });
+    } else {
+      console.log("triggerTodoItemEdit : something went wrong");
+    }
+  };
+
+  const handleTodoItemEdit = (todoItemId, newTodoContent) => {
+    const selectedListIdx = getIndexOfCurrentList();
+
+    let newArrayOfTodoItems = todoLists[selectedListIdx].todoArray;
+
+    const selectedTodoIdx = getIndexOfTodoItemById(
+      todoItemId,
+      newArrayOfTodoItems
+    );
+
+    if (selectedTodoIdx >= 0) {
+      setTodoLists((prevState) => {
+        let newTodoLists = [...prevState];
+        newTodoLists[selectedListIdx].todoArray[selectedTodoIdx].content =
+          newTodoContent;
+        newTodoLists[selectedListIdx].todoArray[
+          selectedTodoIdx
+        ].isUpdate = false;
+        return newTodoLists;
+      });
+    } else {
+      console.error("handleTodoItemEdit: Something went wrong");
+    }
+  };
+  //#endregion
+
+  //#region Utilities
+  const onEnterKeyPress = (e) => {
+    if (e.key === "Enter") addNewNote();
+  };
+  const getIndexOfCurrentList = () => {
+    return todoLists.findIndex((item) => item.id === selectedListId);
+  };
+
+  const getIndexOfTodoItemById = (todoItemId, arrayOfTodoItems) => {
+    return arrayOfTodoItems.findIndex((item) => item.id === todoItemId);
+  };
+
+  function generateUID() {
+    const timestamp = Date.now().toString(36);
+    const randomStr = Math.random().toString(36).substring(2, 7);
+    return timestamp + randomStr;
+  }
+  //#endregion
 
   const handleNoteRemoval = (id, event) => {
     event.preventDefault();
@@ -98,60 +165,10 @@ const TodoListView = () => {
   };
 
   const renderSelectedList = () => {
-    const selectedListIdx = todoLists.findIndex(
-      (item) => item.id === selectedListId
-    );
+    const selectedListIdx = getIndexOfCurrentList();
     const selectedList = todoLists[selectedListIdx];
 
     return selectedList.todoArray.map(mapToDoItems);
-  };
-
-  const triggerNoteUpdate = (id) => {
-    const selectedNoteIdx = notesArray.findIndex((item) => item.id === id);
-    if (selectedNoteIdx >= 0) {
-      setNotesArray((prevState) => {
-        let ns = [...prevState];
-        ns[selectedNoteIdx].isUpdate = true;
-        return ns;
-      });
-    } else {
-      console.log("triggerNoteUpdate : something went wrong");
-    }
-  };
-
-  const saveUpdatedNote = (id) => {
-    const selectedNoteIdx = notesArray.findIndex((item) => item.id === id);
-    if (selectedNoteIdx >= 0) {
-      setNotesArray((prevState) => {
-        let ns = [...prevState];
-        ns[selectedNoteIdx].isUpdate = false;
-        ns[selectedNoteIdx].timeStamp = new Date();
-        return ns;
-      });
-    } else {
-      console.log("triggerNoteUpdate : something went wrong");
-    }
-  };
-
-  const handleNoteUpdate = (id, event) => {
-    const selectedNoteId = id;
-    const textValue = event.target.value;
-
-    const idxToEdit = notesArray.findIndex(
-      (item) => item.id === selectedNoteId
-    );
-    console.log("NOTE Index for edit: ", idxToEdit);
-    if (idxToEdit >= 0) {
-      setNotesArray((prevState) => {
-        const newStateArr = [...prevState];
-
-        newStateArr[idxToEdit].content = textValue;
-
-        return newStateArr;
-      });
-    } else {
-      console.log("You are not accessing the index correctly");
-    }
   };
 
   const addToCompleted = (id) => {
@@ -182,9 +199,8 @@ const TodoListView = () => {
         <SingleToDo
           key={"Completed-" + note.id}
           note={note}
-          handleNoteUpdate={handleNoteUpdate}
-          saveUpdatedNote={saveUpdatedNote}
-          triggerNoteUpdate={triggerNoteUpdate}
+          handleTodoItemEdit={handleTodoItemEdit}
+          triggerTodoItemEdit={triggerTodoItemEdit}
           handleNoteRemoval={handleNoteRemoval}
           addToCompleted={addToCompleted}
           handleUndo={handleUndo}
@@ -199,9 +215,8 @@ const TodoListView = () => {
         <SingleToDo
           key={"TodoItem-" + note.id}
           note={note}
-          handleNoteUpdate={handleNoteUpdate}
-          saveUpdatedNote={saveUpdatedNote}
-          triggerNoteUpdate={triggerNoteUpdate}
+          handleTodoItemEdit={handleTodoItemEdit}
+          triggerTodoItemEdit={triggerTodoItemEdit}
           handleNoteRemoval={handleNoteRemoval}
           addToCompleted={addToCompleted}
           handleUndo={handleUndo}
@@ -209,9 +224,6 @@ const TodoListView = () => {
         ></SingleToDo>
       );
   };
-  // const onEnterKeyPress = (e) => {
-  //   if (e.key === "Enter") addNewNote();
-  // };
 
   return (
     <>
@@ -255,10 +267,7 @@ const TodoListView = () => {
                   id="todo-input"
                   ref={todoInputRef}
                   placeholder="Ex. 'Pick up groceries at 3pm'"
-                  // onChange={(e) => {
-                  //   setNewNote(e.target.value);
-                  // }}
-                  //onKeyDown={onEnterKeyPress}
+                  onKeyDown={onEnterKeyPress}
                 />
                 <Button size="lg" variant="primary" onClick={addNewNote}>
                   <FontAwesomeIcon icon={faPlus} /> Todo

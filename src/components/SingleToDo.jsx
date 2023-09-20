@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Row, Col, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,14 +12,15 @@ import "./singletodo.scss";
 
 const SingleToDo = ({
   note,
-  handleNoteUpdate,
-  saveUpdatedNote,
-  triggerNoteUpdate,
+  handleTodoItemEdit,
+  triggerTodoItemEdit,
   handleNoteRemoval,
   addToCompleted,
   isComplete,
   handleUndo,
 }) => {
+  const [input, setInput] = useState(note.content);
+
   return (
     <Card
       border={isComplete && "success"}
@@ -46,10 +47,11 @@ const SingleToDo = ({
         <Col className="d-flex align-items-center gap-2">
           {note.isUpdate ? (
             <Form.Control
-              value={note.content}
+              value={input}
               onChange={(e) => {
-                handleNoteUpdate(note.id, e);
+                setInput(e.target.value);
               }}
+              //ref={internalTodoInputRef}
             />
           ) : (
             <>
@@ -68,7 +70,7 @@ const SingleToDo = ({
                 <button
                   type="button"
                   onClick={(e) => {
-                    saveUpdatedNote(note.id);
+                    handleTodoItemEdit(note.id, input);
                   }}
                   className="todo-button save"
                   style={{ width: "100%" }}
@@ -81,7 +83,7 @@ const SingleToDo = ({
                   <button
                     type="button"
                     onClick={(e) => {
-                      triggerNoteUpdate(note.id);
+                      triggerTodoItemEdit(note.id);
                     }}
                     className="todo-button edit"
                     style={{ width: "50%" }}
