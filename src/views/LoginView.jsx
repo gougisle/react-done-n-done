@@ -6,6 +6,7 @@ import {
   Button,
   Alert,
   FormCheck,
+  FloatingLabel,
 } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
@@ -64,7 +65,35 @@ const LoginView = () => {
             <Card.Body>
               {error && <Alert variant="danger">{error}</Alert>}
               <Form onSubmit={onLoginAttempt}>
-                <Form.Group id="email">
+                <Form.Group>
+                  {" "}
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label="Email"
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      type="email"
+                      placeholder="name@example.com"
+                      required
+                      ref={emailRef}
+                    />
+                  </FloatingLabel>
+                  <FloatingLabel
+                    controlId="floatingPassword"
+                    label="Password"
+                    className="mb-2"
+                  >
+                    <Form.Control
+                      placeholder="Password"
+                      type={showPassword ? "text" : "password"}
+                      required
+                      ref={passwordRef}
+                    />
+                  </FloatingLabel>
+                </Form.Group>
+
+                {/* <Form.Group id="email">
                   <Form.Label> Email</Form.Label>
                   <Form.Control type="email" required ref={emailRef} />
                 </Form.Group>
@@ -75,7 +104,7 @@ const LoginView = () => {
                     required
                     ref={passwordRef}
                   />
-                </Form.Group>
+                </Form.Group> */}
                 <FormCheck
                   type="checkbox"
                   value={false}
