@@ -51,7 +51,6 @@ const SingleToDo = ({
               onChange={(e) => {
                 setInput(e.target.value);
               }}
-              //ref={internalTodoInputRef}
             />
           ) : (
             <>

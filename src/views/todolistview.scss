@@ -1,0 +1,33 @@
+.todo-list-horizontal-container {
+  //max-width: 900px;
+  height: 60px;
+  display: flex;
+  overflow-x: auto;
+  flex: 1;
+  margin-bottom: 20px;
+
+  .todo-list-button {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 3px solid black;
+    margin-right: 5px;
+    padding: 10px;
+    //border-radius: 5px;
+    &:hover {
+      border-bottom: 3px solid rgb(11, 217, 249);
+    }
+  }
+  &::-webkit-scrollbar {
+    height: 5px;
+    // /display: none;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: grey;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+  }
+}
