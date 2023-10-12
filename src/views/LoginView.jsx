@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Card,
@@ -16,7 +17,7 @@ const LoginView = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   const emailRef = useRef();
   const passwordRef = useRef();
   const authContext = useAuth();
@@ -31,6 +32,7 @@ const LoginView = () => {
       try {
         await authContext.login(emailInput, passwordInput);
         toast.success("Logged In Successfully!");
+        navigate("/");
       } catch (error) {
         if (error.code === "auth/invalid-login-credentials") {
           setError(
@@ -60,7 +62,7 @@ const LoginView = () => {
           {" "}
           <Card>
             <Card.Header>
-              <h2 className="text-center">Login</h2>
+              <h2 className="text-center">Log In</h2>
             </Card.Header>
             <Card.Body>
               {error && <Alert variant="danger">{error}</Alert>}
@@ -68,7 +70,7 @@ const LoginView = () => {
                 <Form.Group>
                   {" "}
                   <FloatingLabel
-                    controlId="floatingInput"
+                    controlId="floatingEmail"
                     label="Email"
                     className="mb-3"
                   >
@@ -92,30 +94,20 @@ const LoginView = () => {
                     />
                   </FloatingLabel>
                 </Form.Group>
-
-                {/* <Form.Group id="email">
-                  <Form.Label> Email</Form.Label>
-                  <Form.Control type="email" required ref={emailRef} />
-                </Form.Group>
-                <Form.Group id="password">
-                  <Form.Label> Password</Form.Label>
-                  <Form.Control
-                    type={showPassword ? "text" : "password"}
-                    required
-                    ref={passwordRef}
-                  />
-                </Form.Group> */}
-                <FormCheck
-                  type="checkbox"
-                  value={false}
-                  label="Show password"
-                  onChange={(e) => {
-                    setShowPassword(!showPassword);
-                  }}
-                ></FormCheck>
+                <div className="w-100  mt-2 d-flex justify-content-between">
+                  <FormCheck
+                    type="checkbox"
+                    value={false}
+                    label="Show password"
+                    onChange={(e) => {
+                      setShowPassword(!showPassword);
+                    }}
+                  ></FormCheck>
+                  <a href="/reset-password">Forgot Password</a>
+                </div>
                 <Button disabled={loading} type="submit" className="w-100 mt-3">
                   {" "}
-                  Login
+                  Log In
                 </Button>
               </Form>
             </Card.Body>
