@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "./App.scss";
 import "react-toastify/dist/ReactToastify.css";
 
+const ResetPassword = React.lazy(() => import("./views/ResetPassword"));
 const LoadingSpinner = React.lazy(() => import("./components/LoadingSpinner"));
 const TodoListView = React.lazy(() => import("./views/TodoListView"));
 const SignUpView = React.lazy(() => import("./views/SignUpView"));
@@ -21,6 +22,7 @@ function App() {
           <Routes>
             <Route exact path="/login" Component={LoginView} />
             <Route exact path="/signup" Component={SignUpView} />
+            <Route path="/reset-password" Component={ResetPassword}></Route>
             <Route exact path="/" Component={TodoListView} />
           </Routes>
         </Suspense>

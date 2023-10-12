@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 
 //create a context that we can use throughout the App
@@ -17,7 +18,8 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState({ id: 1 });
+  const [currentUser, setCurrentUser] = useState();
+  const [loading, setLoading] = useState(true);
 
   //this function will execute a firebase method to register a new user, and return a Promise
   function signup(email, password) {
@@ -31,16 +33,25 @@ export function AuthProvider({ children }) {
     return signOut(auth);
   }
 
+  function resetPassword(email) {
+    return sendPasswordResetEmail(auth, email);
+  }
+
   useEffect(() => {
     //this method automatically fires whenever the user state changes (i.e. create, login, logout, etc.)
     //We place it within a useEffect with empty dependency array to ensure it only runs once
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      setLoading(false);
       setCurrentUser(user);
     });
     return unsubscribe;
   }, []);
 
-  const value = { currentUser, signup, logout, login };
+  const value = { currentUser, signup, logout, login, resetPassword };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
 }
