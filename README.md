@@ -1,7 +1,6 @@
-# react-template
+# react-done-done
 
-The purpose of this project is to be a starting template for future React projects. It comes with some packages already added for convenience (see below). 
-Some of the default files from 'npx create-react-app' have been removed.
+This is a To Do App that I created using React. I am the kind of person who always makes hand-written lists to help me organize day so I decided to make webiste for it, for fun! Below you will find the library/frameworks I used for this project.
 
 ### Currently Included Packages:
 - [React-Bootstrap](https://react-bootstrap.github.io/docs/getting-started/introduction) (v5)
