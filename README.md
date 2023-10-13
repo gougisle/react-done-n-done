@@ -1,6 +1,6 @@
 # react-done-done
 
-This is a To Do App that I created using React. I am the kind of person who always makes hand-written lists to help me organize day so I decided to make webiste for it, for fun! Below you will find the library/frameworks I used for this project.
+This is a To Do App that I created using React. I am the kind of person who always makes hand-written lists to help organize my day, so I decided to make website for it. Just for fun! Below you will find the libraries/frameworks I used for this project.
 
 ### Currently Included Packages:
 - [React-Bootstrap](https://react-bootstrap.github.io/docs/getting-started/introduction) (v5)
